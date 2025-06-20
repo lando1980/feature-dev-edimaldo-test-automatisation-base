@@ -9,17 +9,18 @@ function fn() {
   
   var config = {
     env: env,
-    port_marvel_api: 'http://bp-se-test-cabcd9b246a5.herokuapp.com',
-    testUserName: 'edimaldo'
+    apiBaseUrl: 'http://bp-se-test-cabcd9b246a5.herokuapp.com',
+    username: 'edimaldo',
+    port_marvel_api: 'http://bp-se-test-cabcd9b246a5.herokuapp.com'
   };
 
   karate.log('karate-config.js - config:', config);
 
   // Configurar variables según el entorno
   if (env === 'dev') {
-    config.username = 'edimaldo';
+    // Configuración para entorno de desarrollo
   } else if (env === 'qa') {
-    config.username = 'qauser';
+    // Configuración para entorno QA
   }
   
   karate.log('karate-config.js - final config:', config);

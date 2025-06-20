@@ -4,6 +4,7 @@ import com.intuit.karate.Results;
 import com.intuit.karate.Runner;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Disabled;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -16,6 +17,7 @@ public class MarvelApiTest {
     }
     
     @Test
+    @Disabled("Usando TestRunner para evitar ejecuciones duplicadas")
     void testFeatures() {
         // Ruta al archivo feature específico
         Results results = Runner.path("classpath:com/pichincha/features/marvel_api/gestionPersonajesMarvel.feature")
