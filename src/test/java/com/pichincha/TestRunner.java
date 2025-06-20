@@ -6,6 +6,6 @@ class TestRunner {
 
     @Karate.Test
     Karate testMarvelAPI() {
-        return Karate.run("classpath:com/pichincha/features/marvel_api/gestionPersonajesMarvel.feature");
+        return Karate.run("features/marvel_api/gestionPersonajesMarvel.feature").relativeTo(getClass());
     }
 }

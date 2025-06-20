@@ -12,6 +12,7 @@ Feature: Test de API súper simple
     Then status 200
     And match response == '#[]'
 
+
   @id:2 @GetCharacterById
   Scenario: T-API-HU-01-CA2-Character Crear personaje y Obtener por Id
     * def name = 'Iron Man ' + random.substring(0, 5)
@@ -33,12 +34,14 @@ Feature: Test de API súper simple
     When method get
     Then status 200
 
+
   @id:3 @GetCharacterByIdNotExists
   Scenario: T-API-HU-01-CA3-Character Obtener por id que no existe
     Given url 'http://bp-se-test-cabcd9b246a5.herokuapp.com/edimaldo/api/characters/4500'
     When method get
     Then status 404
     And match response.error == "Character not found"
+
 
   @id:4 @CreateCharacter
   Scenario: T-API-HU-01-CA4-Character Crear personaje Iron Man
@@ -55,6 +58,7 @@ Feature: Test de API súper simple
     """
     When method post
     Then status 201
+
 
   @id:5 @CreateCharacterWithNameAlreadyExists
   Scenario: T-API-HU-01-CA5-Character Crear personaje con nombre que ya existe
@@ -86,6 +90,7 @@ Feature: Test de API súper simple
     Then status 400
     And match response.error == "Character name already exists"
 
+
   @id:6 @CreateCharacterMissingParameters
   Scenario: T-API-HU-01-CA6-Character Crear personaje sin enviar parametros requeridos
     Given url 'http://bp-se-test-cabcd9b246a5.herokuapp.com/edimaldo/api/characters'
@@ -104,6 +109,7 @@ Feature: Test de API súper simple
     And match response.description == "Description is required"
     And match response.alterego == "Alterego is required"
     And match response.powers == "Powers are required"
+
 
   @id:7 @UpdateCharacter
   Scenario: T-API-HU-01-CA7-Character Crear y Actualizar personaje creado
@@ -136,6 +142,7 @@ Feature: Test de API súper simple
     Then status 200
     And match response.name == "Iron Man Avengers Updated"
 
+
   @id:8 @UpdateCharacterNotExists
   Scenario: T-API-HU-01-CA8-Character Actualizar personaje que no existe
     * def name = 'Iron Man ' + random.substring(0, 5)
@@ -152,6 +159,7 @@ Feature: Test de API súper simple
     When method put
     Then status 404
     And match response.error == "Character not found"
+
 
   @id:9 @DeleteCharacter
   Scenario: T-API-HU-01-CA9-Character Crear y eliminar Character
@@ -173,6 +181,7 @@ Feature: Test de API súper simple
     Given url `http://bp-se-test-cabcd9b246a5.herokuapp.com/edimaldo/api/characters/${characterId}`
     When method delete
     Then status 204
+
 
   @id:10 @DeleteCharacterNotExists
   Scenario: T-API-HU-01-CA10-Character Eliminar Character que no existe
