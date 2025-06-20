@@ -2,14 +2,15 @@
 Feature: dev-edimaldo001 API de Personajes Marvel (microservicio para gestionar personajes de Marvel)
 
   Background:
-    * url port_marvel_api
+    * def apiBaseUrl = 'http://bp-se-test-cabcd9b246a5.herokuapp.com'
     * def username = 'edimaldo'
     * def basePath = '/' + username + '/api/characters'
+    * url apiBaseUrl
     * configure ssl = true
     * configure headers = { 'Content-Type': 'application/json' }
-    * def createCharacter = read('classpath:data/marvel_api/request_create_character.json')
-    * def updateCharacter = read('classpath:data/marvel_api/request_update_character.json')
-    * def invalidCharacter = read('classpath:data/marvel_api/request_create_character_invalid.json')
+    * def createCharacter = { "name": "Iron Man", "alterego": "Tony Stark", "description": "Genius billionaire", "powers": ["Armor", "Flight"] }
+    * def updateCharacter = { "name": "Iron Man", "alterego": "Tony Stark", "description": "Updated description", "powers": ["Armor", "Flight"] }
+    * def invalidCharacter = { "name": "", "alterego": "", "description": "", "powers": [] }
 
   @id:1 @obtenerPersonajes @respuestaExitosa200
   Scenario: T-API-dev-edimaldo001-CA01-Obtener todos los personajes 200 - karate

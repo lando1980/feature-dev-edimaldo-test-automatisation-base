@@ -21,9 +21,41 @@ dependencies {
             "com.intuit.karate:karate-netty:0.9.2",
             "com.intuit.karate:karate-apache:0.9.6",
             "net.masterthought:cucumber-reporting:5.8.1",
-            'junit:junit:4.13.2'
+            'junit:junit:4.13.2',
+            'ch.qos.logback:logback-classic:1.4.11'
 }
 
 test {
     useJUnitPlatform()
+    
+    // Configuración de entorno y opciones
+    systemProperty "karate.options", System.properties.getProperty("karate.options")
+    systemProperty "karate.env", System.properties.getProperty("karate.env", "dev")
+    systemProperty "karate.config.dir", "src/test/java"
+    
+    // Forzar ejecución de tests siempre
+    outputs.upToDateWhen { false }
+    
+    // Mostrar más información de logging
+    testLogging {
+        events "passed", "skipped", "failed"
+        showStandardStreams = true
+        exceptionFormat = 'full'
+    }
+}
+
+// Configuración para incluir archivos .feature como recursos
+sourceSets {
+    test {
+        resources {
+            srcDir file('src/test/java')
+            exclude '**/*.java'
+            exclude '**/*.class'
+        }
+    }
+}
+
+task karateDebug(type: JavaExec) {
+    classpath = sourceSets.test.runtimeClasspath
+    main = 'com.intuit.karate.cli.Main'
 }
