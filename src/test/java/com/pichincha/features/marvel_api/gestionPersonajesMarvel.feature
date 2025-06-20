@@ -1,15 +1,16 @@
 @REQ_dev-edimaldo001 @HU001 @marvel_characters_api @marvel_api @Agente2 @E2 @iniciativa_api_test
 Feature: dev-edimaldo001 API de Personajes Marvel (microservicio para gestionar personajes de Marvel)
+
   Background:
-    * url apiBaseUrl
+    * url port_marvel_api
     * def basePath = '/' + username + '/api/characters'
     * path basePath
     * configure ssl = true
     * configure headers = { 'Content-Type': 'application/json' }
+    * def random = function(){ return java.util.UUID.randomUUID().toString().substring(0, 8) }
     * def createCharacter = read('classpath:data/marvel_api/request_create_character.json')
     * def updateCharacter = read('classpath:data/marvel_api/request_update_character.json')
     * def invalidCharacter = read('classpath:data/marvel_api/request_create_character_invalid.json')
-    * def randomId = function(){ return Math.floor((Math.random() * 1000) + 1000) + '' }
   @id:1 @obtenerPersonajes @respuestaExitosa200
   Scenario: T-API-dev-edimaldo001-CA01-Obtener todos los personajes 200 - karate
     When method get
@@ -33,22 +34,20 @@ Feature: dev-edimaldo001 API de Personajes Marvel (microservicio para gestionar 
     When method get
     Then status 404
     And match response.error == 'Character not found'
-    And match response == { error: '#string' }
-  @id:4 @crearPersonaje @respuestaCreado201
+    And match response == { error: '#string' }  @id:4 @crearPersonaje @respuestaCreado201
   Scenario: T-API-dev-edimaldo001-CA04-Crear personaje exitosamente 201 - karate
     * def uniqueCharacter = createCharacter
-    * uniqueCharacter.name = 'IronMan' + randomId()
+    * uniqueCharacter.name = 'IronMan-' + random()
     And request uniqueCharacter
     When method post
     Then status 201
     And match response.id == '#number'
     And match response.name == uniqueCharacter.name
-
   @id:5 @crearPersonaje @respuestaDuplicado400
   Scenario: T-API-dev-edimaldo001-CA05-Crear personaje con nombre duplicado 400 - karate
     # Primero creamos un personaje con nombre único
     * def uniqueCharacter = createCharacter
-    * uniqueCharacter.name = 'DuplicateTest' + randomId()
+    * uniqueCharacter.name = 'DuplicateTest-' + random()
     And request uniqueCharacter
     When method post
     Then status 201
@@ -66,12 +65,11 @@ Feature: dev-edimaldo001 API de Personajes Marvel (microservicio para gestionar 
     When method post
     Then status 400
     And match response.name == 'Name is required'
-    And match response contains { name: '#string' }
-  @id:7 @actualizarPersonaje @respuestaExitosa200
+    And match response contains { name: '#string' }  @id:7 @actualizarPersonaje @respuestaExitosa200
   Scenario: T-API-dev-edimaldo001-CA07-Actualizar personaje existente 200 - karate
     # Primero creamos un personaje con nombre único
     * def uniqueCharacter = createCharacter
-    * uniqueCharacter.name = 'UpdateTest' + randomId()
+    * uniqueCharacter.name = 'UpdateTest-' + random()
     And request uniqueCharacter
     When method post
     Then status 201
@@ -96,12 +94,11 @@ Feature: dev-edimaldo001 API de Personajes Marvel (microservicio para gestionar 
     Then status 404
     And match response.error == 'Character not found'
     And match response == { error: '#string' }
-
   @id:9 @eliminarPersonaje @respuestaExitosa204
   Scenario: T-API-dev-edimaldo001-CA09-Eliminar personaje existente 204 - karate
     # Primero creamos un personaje con nombre único
     * def uniqueCharacter = createCharacter
-    * uniqueCharacter.name = 'DeleteTest' + randomId()
+    * uniqueCharacter.name = 'DeleteTest-' + random()
     And request uniqueCharacter
     When method post
     Then status 201
@@ -119,11 +116,10 @@ Feature: dev-edimaldo001 API de Personajes Marvel (microservicio para gestionar 
     When method delete
     Then status 404
     And match response.error == 'Character not found'
-    And match response == { error: '#string' }
-  @id:11 @errorServidor @respuestaError500
+    And match response == { error: '#string' }  @id:11 @errorServidor @respuestaError500
   Scenario: T-API-dev-edimaldo001-CA11-Error interno del servidor 500 - karate
     # Este escenario apunta a un endpoint incorrecto para generar un error 500
-    * url apiBaseUrl
+    * url port_marvel_api
     * path '/invalid-endpoint'
     When method get
     Then status 500
